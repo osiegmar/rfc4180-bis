@@ -123,9 +123,8 @@ For example:
    "aaa","bbb","ccc"CRLF<br/>
    zzz,yyy,xxxCRLF
 
-6. Fields containing line breaks (CR, LF or CRLF), double quotes, or commas
-MUST be enclosed in double-quotes. The same applies for the first field of
-a record that starts with a hash. For example:
+6. Fields containing line breaks (CR, LF or CRLF), double quotes, hashes or commas
+MUST be enclosed in double-quotes. For example:
 
    "aaa","b CRLF<br/>
    bb","ccc"CRLF<br/>
@@ -171,19 +170,15 @@ file = *((comment / record) linebreak)
 
 comment = hash *comment-data
 
-record = first-field *(comma field)
+record = field *(comma field)
 
 linebreak = CR / LF / CRLF
 
-first-field = (escaped / first-non-escaped)
-
 field = (escaped / non-escaped)
 
-escaped = DQUOTE *(textdata-with-hash / comma / CR / LF / 2DQUOTE) DQUOTE
+escaped = DQUOTE *(textdata / comma / hash / CR / LF / 2DQUOTE) DQUOTE
 
-first-non-escaped = [textdata *textdata-with-hash]
-
-non-escaped = *textdata-with-hash
+non-escaped = *textdata
 
 comma = %x2C
 
@@ -192,8 +187,6 @@ hash = %x23
 comment-data = WSP / VCHAR
 
 textdata = WSP / %x21 / %x24-2B / %x2D-7E ;WSP / VCHAR without comma, hash and DQUOTE
-
-textdata-with-hash = textdata / hash
 
 CR = %x0D ;as per section B.1 of [RFC5234]
 
